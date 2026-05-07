@@ -1,331 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noted — Your curated intentions</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Noted — beta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
-    body {
-      font-family: 'DM Mono', monospace;
-      background: #ffffff;
-      color: #111111;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+  :root {
+    --paper:    #f0e9dd;
+    --paper-2:  #e7dfd0;
+    --ink:      #2a221c;
+    --ink-soft: #5a4d40;
+    --quiet:    #9c8e76;
+    --hairline: #d4c8b3;
+    --walnut:   #6b4423;
+    --px: clamp(24px, 6vw, 56px);
+  }
 
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 2rem 2.5rem;
-      border-bottom: 0.5px solid #e0e0e0;
-    }
+  html, body { height: 100%; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex; flex-direction: column;
+  }
 
-    .nav-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 24px var(--px);
+    flex-shrink: 0;
+  }
+  .wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .wordmark::after { content: '.'; color: var(--walnut); }
+  .beta-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--walnut);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .beta-chip .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--walnut);
+  }
 
-    .nav-wordmark {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.02em;
-      color: #111111;
-      line-height: 1;
-    }
+  .letter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px var(--px) 32px;
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+  }
 
-    .nav-tagline {
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      color: #999999;
-      font-style: italic;
-      font-family: 'DM Serif Display', serif;
-    }
+  .salutation {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    margin-bottom: 28px;
+    white-space: nowrap;
+  }
+  .salutation .name { color: var(--walnut); }
 
-    .nav-domain {
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #666666;
-      padding-top: 0.15rem;
-    }
+  .opener {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+    max-width: 28ch;
+    text-wrap: balance;
+  }
 
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 2.5rem 4rem;
-      max-width: 660px;
-    }
+  .headline {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 7.5vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 36px;
+    text-wrap: balance;
+  }
+  .headline em { font-style: italic; }
+  .headline .dot { color: var(--walnut); }
 
-    .hero-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #999999;
-      margin-bottom: 3rem;
-    }
+  .body-copy {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(16px, 1.9vw, 19px);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 44px;
+    max-width: 36ch;
+  }
+  .body-copy p + p { margin-top: 14px; }
 
-    .hero-questions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-      margin-bottom: 2rem;
-    }
+  .cta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 16px 28px;
+    border: none;
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 200ms ease;
+  }
+  .cta:hover { background: var(--walnut); }
+  .cta .arrow {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    line-height: 1;
+    transition: transform 200ms ease;
+  }
+  .cta:hover .arrow { transform: translateX(4px); }
+  .cta-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--quiet);
+  }
 
-    .hero-question {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
-      line-height: 1.4;
-      color: #666666;
-      font-style: italic;
-      font-weight: 400;
-    }
+  .signoff {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .signoff .dash {
+    font-family: 'DM Mono', monospace;
+    font-style: normal;
+    color: var(--quiet);
+    margin-right: 4px;
+  }
 
-    .hero-question.fade-1 { opacity: 1; }
-    .hero-question.fade-2 { opacity: 0.75; }
-    .hero-question.fade-3 { opacity: 0.5; }
+  .footer {
+    padding: 20px var(--px);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    white-space: nowrap;
+  }
 
-    .hero-headline {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.6rem, 6vw, 3.8rem);
-      line-height: 1.1;
-      color: #111111;
-      font-weight: 400;
-      margin-bottom: 3.5rem;
-    }
-
-    .invite-block {
-      border-top: 0.5px solid #e0e0e0;
-      padding-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .invite-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #999999;
-    }
-
-    .invite-btn {
-      display: inline-block;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.75rem 1.5rem;
-      border: 0.5px solid #111111;
-      background: #111111;
-      color: #ffffff;
-      border-radius: 4px;
-      cursor: pointer;
-      white-space: nowrap;
-      text-decoration: none;
-    }
-
-    .invite-btn:hover { background: #333333; border-color: #333333; }
-
-    .invite-note {
-      font-size: 0.68rem;
-      color: #999999;
-      letter-spacing: 0.02em;
-      line-height: 1.6;
-    }
-
-    .divider {
-      border: none;
-      border-top: 0.5px solid #e0e0e0;
-      margin: 0;
-    }
-
-    .principles {
-      padding: 4rem 2.5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 2.5rem;
-    }
-
-    .principle-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #999999;
-      margin-bottom: 0.6rem;
-    }
-
-    .principle-text {
-      font-size: 0.78rem;
-      color: #666666;
-      line-height: 1.8;
-      letter-spacing: 0.02em;
-    }
-
-    .how {
-      padding: 4rem 2.5rem;
-      border-top: 0.5px solid #e0e0e0;
-      max-width: 660px;
-    }
-
-    .how-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #999999;
-      margin-bottom: 2rem;
-    }
-
-    .how-steps {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .how-step {
-      display: flex;
-      gap: 1.5rem;
-      padding: 1.5rem 0;
-      border-bottom: 0.5px solid #e0e0e0;
-      align-items: flex-start;
-    }
-
-    .how-step:last-child { border-bottom: none; }
-
-    .how-step-num {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      color: #999999;
-      padding-top: 0.15rem;
-      min-width: 1.5rem;
-    }
-
-    .how-step-title {
-      font-size: 0.82rem;
-      color: #111111;
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.02em;
-    }
-
-    .how-step-desc {
-      font-size: 0.75rem;
-      color: #666666;
-      line-height: 1.7;
-      letter-spacing: 0.02em;
-    }
-
-    .footer {
-      padding: 1.5rem 2.5rem;
-      border-top: 0.5px solid #e0e0e0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-copy {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      color: #999999;
-      text-transform: uppercase;
-    }
-
-    .footer-tagline {
-      font-family: 'DM Serif Display', serif;
-      font-size: 0.85rem;
-      color: #999999;
-      font-style: italic;
-    }
-  </style>
+  @media (max-width: 540px) {
+    .letter { justify-content: flex-start; padding-top: 24px; }
+    .salutation { margin-bottom: 22px; }
+    .opener { margin-bottom: 24px; }
+    .headline { margin-bottom: 28px; }
+    .body-copy { margin-bottom: 36px; }
+    .cta-block { margin-bottom: 40px; }
+  }
+</style>
 </head>
 <body>
 
-  <nav class="nav">
-    <div class="nav-left">
-      <span class="nav-wordmark">Noted</span>
-      <span class="nav-tagline">Your curated intentions</span>
+  <header class="topbar">
+    <span class="wordmark">Noted</span>
+    <span class="beta-chip"><span class="dot"></span>Beta — round one</span>
+  </header>
+
+  <main class="letter">
+    <p class="salutation">— For <span class="name" id="recipient">you</span></p>
+
+    <p class="opener">I called you about this. You said yes.</p>
+
+    <h1 class="headline">Welcome<br/>to <em>Noted</em><span class="dot">.</span></h1>
+
+    <div class="body-copy">
+      <p>A small place for the things that catch you in passing — a poster on a wall, a line in a magazine, a thought you had over coffee.</p>
+      <p>It's rough in places. Tell me when something breaks. There's nothing in there yet — that's the point.</p>
     </div>
-    <span class="nav-domain">iJoinedNoted.com</span>
-  </nav>
 
-  <main class="hero">
-    <p class="hero-label">Private · Personal · Frictionless</p>
-
-    <div class="hero-questions">
-      <p class="hero-question fade-1">A poster on a wall.</p>
-      <p class="hero-question fade-2">A line in a magazine.</p>
-      <p class="hero-question fade-3">A thought over coffee.</p>
+    <div class="cta-block">
+      <a class="cta" href="https://app.ijoinednoted.com/signup" id="cta">
+        Set up your account <span class="arrow">→</span>
+      </a>
+      <p class="cta-note">Takes about a minute</p>
     </div>
 
-    <h1 class="hero-headline">Noted keeps<br>what caught your eye.</h1>
-
-    <div class="invite-block">
-      <p class="invite-label">Early access</p>
-      <a class="invite-btn" href="https://noted-tan.vercel.app/signup">Join Noted</a>
-      <p class="invite-note">
-        Noted is invite-only. If you're here, someone thought of you.
-      </p>
-    </div>
+    <p class="signoff"><span class="dash">—</span>Rich</p>
   </main>
 
-  <hr class="divider" />
-
-  <section class="principles">
-    <div>
-      <p class="principle-label">Capture</p>
-      <p class="principle-text">A URL, a photo, a thought. Under ten seconds. Claude extracts everything that matters.</p>
-    </div>
-    <div>
-      <p class="principle-label">Private</p>
-      <p class="principle-text">Your intentions belong to you alone. No tracking. No feed. No noise.</p>
-    </div>
-    <div>
-      <p class="principle-label">Find</p>
-      <p class="principle-text">"Hotels I saved in Italy." "Bands playing this month." Ask anything. It finds it.</p>
-    </div>
-    <div>
-      <p class="principle-label">Nudge</p>
-      <p class="principle-text">A quiet monthly email. Five intentions worth revisiting. Been yet?</p>
-    </div>
-  </section>
-
-  <section class="how">
-    <p class="how-label">How it works</p>
-    <div class="how-steps">
-      <div class="how-step">
-        <span class="how-step-num">01</span>
-        <div>
-          <p class="how-step-title">You point at something</p>
-          <p class="how-step-desc">A URL, a photo of a poster, a shop front, a product page. Anything that catches your eye.</p>
-        </div>
-      </div>
-      <div class="how-step">
-        <span class="how-step-num">02</span>
-        <div>
-          <p class="how-step-title">Claude reads it</p>
-          <p class="how-step-desc">Extracts what matters. Name, location, date, description. Summarises in plain language. You confirm and save.</p>
-        </div>
-      </div>
-      <div class="how-step">
-        <span class="how-step-num">03</span>
-        <div>
-          <p class="how-step-title">It's there when you need it</p>
-          <p class="how-step-desc">Search in plain language. Get a quiet nudge when something's coming up. Never lose an intention again.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <footer class="footer">
-    <span class="footer-copy">Noted · May 2026</span>
-    <span class="footer-tagline">Tell your friends.</span>
+    <span class="footer-meta">iJoinedNoted.com</span>
+    <span class="footer-meta">May 2026</span>
   </footer>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('to') || params.get('for') || params.get('name');
+      if (!raw) return;
+      const cleaned = raw.trim().split(/\s+/)[0].slice(0, 24);
+      if (!cleaned) return;
+      const name = cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+      const el = document.getElementById('recipient');
+      if (el) el.textContent = name;
+      const cta = document.getElementById('cta');
+      if (cta) {
+        const url = new URL(cta.href);
+        url.searchParams.set('invited', cleaned.toLowerCase());
+        cta.href = url.toString();
+      }
+    })();
+  </script>
 
 </body>
 </html>
