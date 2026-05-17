@@ -163,6 +163,12 @@
     transition: transform 200ms ease;
   }
   .cta:hover .arrow { transform: translateX(4px); }
+  .cta--outline {
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+  }
+  .cta--outline:hover { background: transparent; border-color: var(--walnut); color: var(--walnut); }
   .cta-note {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -236,6 +242,9 @@
     <div class="cta-block">
       <a class="cta" href="https://app.ijoinednoted.com/signup" id="cta">
         Set up your account <span class="arrow">→</span>
+      </a>
+      <a class="cta cta--outline" href="https://app.ijoinednoted.com">
+        I already have an account <span class="arrow">→</span>
       </a>
       <p class="cta-note">Takes about a minute</p>
     </div>
